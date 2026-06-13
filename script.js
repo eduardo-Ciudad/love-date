@@ -3,10 +3,10 @@
    ============================================= */
 const CONFIG = {
   encontro: {
-    data: "20 de Junho",
+    data: "sabado",
     horario: "19:00",
-    local: "Rio Preto Shopping",
-    atividade: "Jantar Japonês"
+    local: "bom prato",
+    atividade: "jantar "
   },
   whatsapp: {
     numero: "5517999999999",
@@ -220,14 +220,20 @@ let noAttempts = 0;
 function repositionNoBtn() {
   const btn = $('btn-no');
   const margin = 20;
-  const bw = btn.offsetWidth || 160;
+
+  // ✅ Salva largura ANTES de virar fixed (enquanto ainda tem o pai)
+  const fixedWidth = btn.offsetWidth;
   const bh = btn.offsetHeight || 52;
-  const maxX = window.innerWidth - bw - margin;
+
+  const maxX = window.innerWidth - fixedWidth - margin;
   const maxY = window.innerHeight - bh - margin;
   const newX = margin + Math.random() * maxX;
   const newY = margin + Math.random() * maxY;
 
   btn.classList.add('escaping');
+
+  // ✅ Força a largura explícita ao virar fixed
+  btn.style.width = fixedWidth + 'px';
   btn.style.left = newX + 'px';
   btn.style.top = newY + 'px';
 }
@@ -304,7 +310,7 @@ function startLoading() {
    TELA 4 — Surpresa / Typewriter
    ============================================= */
 const TYPEWRITER_SEQUENCE = [
-  { text: "VOCÊ DISSE SIM? 😳",               pause: 1500 },
+  { text: "VOCÊ DISSE SIM? ",               pause: 1500 },
   { text: "Eu jurava que você ia apertar NÃO...", pause: 2000 },
   { text: "Nem preparei essa parte direito 😅",   pause: 1500 },
   { text: "Mas... que bom que você disse sim ❤️", pause: 0 }

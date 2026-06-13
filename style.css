@@ -181,7 +181,7 @@ html, body {
 }
 
 #btn-no.escaping {
-  position: fixed;
+   position: fixed;
   transition: none;
 }
 
