@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <title>Tenho uma pergunta... 💭</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+  <!-- Fundo de partículas -->
+  <canvas id="particles-canvas"></canvas>
+  <canvas id="confetti-canvas"></canvas>
+
+  <!-- Container mobile -->
+  <div id="app">
+
+    <!-- TELA 1 — Introdução -->
+    <section class="screen active" id="screen-1">
+      <div class="screen-content centered">
+        <div class="intro-icon">💭</div>
+        <h1 class="title">Tenho uma pergunta<br />para você...</h1>
+        <p class="subtitle">Mas preciso que responda<br />com sinceridade</p>
+        <button class="btn btn-primary" id="btn-start">Continuar</button>
+      </div>
+    </section>
+
+    <!-- TELA 2 — A Pergunta -->
+    <section class="screen" id="screen-2">
+      <div class="screen-content centered">
+        <div class="question-emoji">🥺</div>
+        <h2 class="question-text">Você aceitaria sair comigo?</h2>
+        <p class="no-message" id="no-message"></p>
+        <div class="buttons-row">
+          <button class="btn btn-primary btn-yes" id="btn-yes">SIM ❤️</button>
+          <button class="btn btn-ghost btn-no" id="btn-no">NÃO 😅</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- TELA 3 — Loading Fake -->
+    <section class="screen" id="screen-3">
+      <div class="screen-content centered">
+        <div class="loading-icon">✨</div>
+        <h2 class="loading-title">Processando...</h2>
+        <div class="progress-container">
+          <div class="progress-bar">
+            <div class="progress-fill" id="progress-fill"></div>
+          </div>
+          <span class="progress-percent" id="progress-percent">0%</span>
+        </div>
+        <p class="progress-message" id="progress-message">Processando resposta...</p>
+      </div>
+    </section>
+
+    <!-- TELA 4 — Surpresa -->
+    <section class="screen" id="screen-4">
+      <div class="screen-content centered">
+        <div class="typewriter-container">
+          <p class="typewriter-text" id="typewriter-text"></p>
+        </div>
+        <button class="btn btn-primary hidden" id="btn-surprise">Ver surpresa →</button>
+      </div>
+    </section>
+
+    <!-- TELA 5 — O Convite -->
+    <section class="screen" id="screen-5">
+      <div class="screen-content centered">
+        <h2 class="invite-title">Nosso encontro 🌸</h2>
+        <div class="glass-card" id="invite-card">
+          <div class="invite-row hidden-row" id="row-data">
+            <span class="invite-icon">📅</span>
+            <span class="invite-text" id="invite-data"></span>
+          </div>
+          <div class="invite-row hidden-row" id="row-hora">
+            <span class="invite-icon">🕐</span>
+            <span class="invite-text" id="invite-hora"></span>
+          </div>
+          <div class="invite-row hidden-row" id="row-local">
+            <span class="invite-icon">📍</span>
+            <span class="invite-text" id="invite-local"></span>
+          </div>
+          <div class="invite-row hidden-row" id="row-ativ">
+            <span class="invite-icon">🍣</span>
+            <span class="invite-text" id="invite-ativ"></span>
+          </div>
+        </div>
+        <button class="btn btn-primary hidden" id="btn-confirm">Confirmar presença ❤️</button>
+      </div>
+    </section>
+
+    <!-- TELA FINAL -->
+    <section class="screen" id="screen-final">
+      <div class="screen-content centered">
+        <div class="final-hearts">❤️</div>
+        <h2 class="final-text" id="final-text"></h2>
+        <p class="final-sub">Obrigado por aceitar. Prometo que essa foi a única parte que eu programei sem Stack Overflow.</p>
+        <button class="btn btn-primary btn-whatsapp" id="btn-whatsapp">Enviar resposta 💬</button>
+      </div>
+    </section>
+
+  </div><!-- /#app -->
+
+  <script src="script.js"></script>
+</body>
+</html>
