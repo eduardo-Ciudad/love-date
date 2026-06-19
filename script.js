@@ -209,11 +209,11 @@ $('btn-start').addEventListener('click', () => {
    TELA 2 — A Pergunta
    ============================================= */
 const NO_MESSAGES = [
-  "Tem certeza? 🥺",
-  "Pensa mais um pouco 😭",
-  "Eu programei isso a madrugada toda",
-  "Não quebra meu coração",
-  "Ok... última chance 🙏"
+  "Tem certeza? ",
+  "Pensa mais um pouco ",
+  "tá acabado as chances",
+  "4 é a da sorte",
+  "ok a ultima chance kkk"
 ];
 let noAttempts = 0;
 
@@ -274,7 +274,7 @@ const LOADING_STEPS = [
   { at: 0,   msg: "Processando resposta..." },
   { at: 25,  msg: "Verificando compatibilidade..." },
   { at: 50,  msg: "Consultando os astros..." },
-  { at: 75,  msg: "Executando algoritmo do amor..." },
+  { at: 75,  msg: "Executando algoritmo " },
   { at: 100, msg: "Resultado encontrado ✓" }
 ];
 
@@ -311,9 +311,9 @@ function startLoading() {
    ============================================= */
 const TYPEWRITER_SEQUENCE = [
   { text: "VOCÊ DISSE SIM? ",               pause: 1500 },
-  { text: "Eu jurava que você ia apertar NÃO...", pause: 2000 },
-  { text: "Nem preparei essa parte direito 😅",   pause: 1500 },
-  { text: "Mas... que bom que você disse sim ❤️", pause: 0 }
+  { text: "valeu o tempo que eu perdi entao", pause: 2000 },
+  { text: "nunca cheguei nessa parte",   pause: 1500 },
+  { text: "mas fica com o resultado", pause: 0 }
 ];
 
 async function startTypewriter() {
@@ -394,7 +394,23 @@ function animateFinalScreen() {
   spawnHearts(8);
 }
 
-$('btn-whatsapp').addEventListener('click', () => {
-  const url = `https://wa.me/${CONFIG.whatsapp.numero}?text=${encodeURIComponent(CONFIG.whatsapp.mensagem)}`;
+$('btn-confirm').addEventListener('click', () => {
+  var data = document.getElementById('input-data').value;
+  var hora = document.getElementById('input-hora').value;
+  var local = document.getElementById('input-local').value;
+  var ativ = document.getElementById('input-ativ').value;
+
+  if (!data || !hora || !local) {
+    alert('Preenche pelo menos a data, hora e local ');
+    return;
+  }
+
+  var msg = '❤️ *Encontro confirmado!*\n\n' +
+    '📅 Data: ' + data + '\n' +
+    '🕐 Hora: ' + hora + '\n' +
+    '📍 Local: ' + local + '\n' +
+    '🍣 Atividade: ' + (ativ || 'Surpresa!');
+    
+  var url = 'https://wa.me/5517997061100?text=' + encodeURIComponent(msg);
   window.open(url, '_blank');
 });
