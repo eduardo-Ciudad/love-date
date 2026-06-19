@@ -353,35 +353,19 @@ $('btn-surprise').addEventListener('click', () => {
   transitionTo('screen-4', 'screen-5');
   setTimeout(animateInviteCard, 200);
 });
-
 /* =============================================
    TELA 5 — O Convite
    ============================================= */
-function animateInviteCard() {
-  // Preenche dados do CONFIG
-  $('invite-data').textContent = CONFIG.encontro.data;
-  $('invite-hora').textContent = CONFIG.encontro.horario;
-  $('invite-local').textContent = CONFIG.encontro.local;
-  $('invite-ativ').textContent = CONFIG.encontro.atividade;
-
-  const rows = ['row-data', 'row-hora', 'row-local', 'row-ativ'];
-  rows.forEach((id, i) => {
-    setTimeout(() => {
-      const el = $(id);
-      el.classList.remove('hidden-row');
-      el.classList.add('visible-row');
-    }, 200 + i * 150);
-  });
-
-  // Botão confirmar aparece após as linhas
-  setTimeout(() => {
-    const btn = $('btn-confirm');
-    btn.classList.remove('hidden');
-    btn.classList.add('visible');
-  }, 200 + rows.length * 150 + 300);
-}
-
 $('btn-confirm').addEventListener('click', () => {
+  var data = document.getElementById('input-data').value;
+  var hora = document.getElementById('input-hora').value;
+  var local = document.getElementById('input-local').value;
+
+  if (!data || !hora || !local) {
+    alert('Preenche pelo menos a data, hora e local 😅');
+    return;
+  }
+
   transitionTo('screen-5', 'screen-final');
   setTimeout(animateFinalScreen, 300);
 });
@@ -394,23 +378,19 @@ function animateFinalScreen() {
   spawnHearts(8);
 }
 
-$('btn-confirm').addEventListener('click', () => {
-  var data = document.getElementById('input-data').value;
-  var hora = document.getElementById('input-hora').value;
-  var local = document.getElementById('input-local').value;
-  var ativ = document.getElementById('input-ativ').value;
-
-  if (!data || !hora || !local) {
-    alert('Preenche pelo menos a data, hora e local ');
-    return;
-  }
+$('btn-whatsapp').addEventListener('click', () => {
+  var data = document.getElementById('input-data').value || 'A combinar';
+  var hora = document.getElementById('input-hora').value || 'A combinar';
+  var local = document.getElementById('input-local').value || 'A combinar';
+  var ativ = document.getElementById('input-ativ').value || 'Surpresa!';
 
   var msg = '❤️ *Encontro confirmado!*\n\n' +
     '📅 Data: ' + data + '\n' +
     '🕐 Hora: ' + hora + '\n' +
     '📍 Local: ' + local + '\n' +
-    '🍣 Atividade: ' + (ativ || 'Surpresa!');
-    
+    '🍣 Atividade: ' + ativ + '\n\n' +
+    'Te vejo lá! 😊';
+
   var url = 'https://wa.me/5517997061100?text=' + encodeURIComponent(msg);
   window.open(url, '_blank');
 });
