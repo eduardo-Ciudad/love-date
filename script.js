@@ -312,7 +312,7 @@ function startLoading() {
 const TYPEWRITER_SEQUENCE = [
   { text: "VOCÊ DISSE SIM? ",               pause: 1500 },
   { text: "valeu o tempo que eu perdi entao", pause: 2000 },
-  { text: "nunca cheguei nessa parte",   pause: 1500 },
+  { text: "impossivel que isso deu certo",   pause: 1500 },
   { text: "mas fica com o resultado", pause: 0 }
 ];
 
