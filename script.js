@@ -12,7 +12,7 @@ const CONFIG = {
     numero: "5517999999999",
     mensagem: "Eu aceitei seu convite ❤️"
   },
-  textoFinal: "Mal posso esperar para te ver ❤️"
+  textoFinal: "Já adianta a derrota"
 };
 
 /* =============================================
@@ -46,13 +46,14 @@ function transitionTo(fromId, toId) {
   }
 
   function createParticles() {
-    particles = Array.from({ length: 60 }, () => ({
+    particles = Array.from({ length: 60 }, (_, index) => ({
       x: Math.random() * W,
       y: Math.random() * H,
       r: Math.random() * 1.8 + 0.4,
       dx: (Math.random() - 0.5) * 0.3,
       dy: -(Math.random() * 0.4 + 0.1),
-      alpha: Math.random() * 0.5 + 0.1
+      alpha: Math.random() * 0.5 + 0.1,
+      color: index % 2 === 0 ? '214,51,108' : '125,176,63'
     }));
   }
 
@@ -61,7 +62,7 @@ function transitionTo(fromId, toId) {
     particles.forEach(p => {
       ctx.beginPath();
       ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
-      ctx.fillStyle = `rgba(255,107,157,${p.alpha})`;
+      ctx.fillStyle = `rgba(${p.color},${p.alpha})`;
       ctx.fill();
 
       p.x += p.dx;
@@ -95,7 +96,7 @@ const Confetti = (() => {
   window.addEventListener('resize', resize);
   resize();
 
-  const COLORS = ['#ff6b9d', '#c44dff', '#ff9ef0', '#ffe066', '#5ee7ff', '#ff4f4f'];
+  const COLORS = ['#D6336C','#F2B3C8','#7DB03F','#A8D163','#8B5E3C','#FFFFFF'];
 
   function launch() {
     const cx = window.innerWidth / 2;
@@ -158,7 +159,7 @@ const Confetti = (() => {
    CORAÇÕES FLUTUANTES
    ============================================= */
 function spawnHearts(count = 12) {
-  const emojis = ['❤️', '🩷', '💕', '💖', '💗'];
+  const emojis = ['❤️', '', '', ''];
   for (let i = 0; i < count; i++) {
     setTimeout(() => {
       const el = document.createElement('div');
@@ -219,43 +220,66 @@ let noAttempts = 0;
 
 function repositionNoBtn() {
   const btn = $('btn-no');
+  const screen = $('screen-2');
   const margin = 20;
-
-  // ✅ Salva largura ANTES de virar fixed (enquanto ainda tem o pai)
   const fixedWidth = btn.offsetWidth;
   const bh = btn.offsetHeight || 52;
+  const screenRect = screen.getBoundingClientRect();
+  const yesRect = $('btn-yes').getBoundingClientRect();
+  const titleRect = screen.querySelector('.question-text').getBoundingClientRect();
+  const maxX = Math.max(margin, screenRect.width - fixedWidth - margin);
+  const maxY = Math.max(margin, screenRect.height - bh - margin);
+  let newX = margin;
+  let newY = margin;
 
-  const maxX = window.innerWidth - fixedWidth - margin;
-  const maxY = window.innerHeight - bh - margin;
-  const newX = margin + Math.random() * maxX;
-  const newY = margin + Math.random() * maxY;
-
+  for (let attempt = 0; attempt < 10; attempt++) {
+    const candidateX = margin + Math.random() * Math.max(0, maxX - margin);
+    const candidateY = margin + Math.random() * Math.max(0, maxY - margin);
+    const candidate = { left: screenRect.left + candidateX, right: screenRect.left + candidateX + fixedWidth, top: screenRect.top + candidateY, bottom: screenRect.top + candidateY + bh };
+    const intersects = (rect) => !(candidate.right + 12 < rect.left || candidate.left - 12 > rect.right || candidate.bottom + 12 < rect.top || candidate.top - 12 > rect.bottom);
+    newX = candidateX;
+    newY = candidateY;
+    if (!intersects(yesRect) && !intersects(titleRect)) break;
+  }
   btn.classList.add('escaping');
-
-  // ✅ Força a largura explícita ao virar fixed
+  screen.appendChild(btn);
   btn.style.width = fixedWidth + 'px';
   btn.style.left = newX + 'px';
   btn.style.top = newY + 'px';
 }
 
 function handleNoEscape() {
+  const message = $('no-message');
+  const sadKiwi = message.querySelector('.no-kiwi');
+  $('no-message-text').textContent = NO_MESSAGES[noAttempts];
+  message.classList.add('visible');
+  sadKiwi.classList.remove('shake');
+  void sadKiwi.offsetWidth;
+  sadKiwi.classList.add('shake');
+  noAttempts++;
   if (noAttempts >= NO_MESSAGES.length) {
-    // Desaparece silenciosamente após 5 tentativas
     const btn = $('btn-no');
     btn.style.opacity = '0';
     btn.style.pointerEvents = 'none';
     return;
   }
-  $('no-message').textContent = NO_MESSAGES[noAttempts];
-  noAttempts++;
   repositionNoBtn();
 }
 
-$('btn-no').addEventListener('mouseover', handleNoEscape);
-$('btn-no').addEventListener('touchstart', (e) => {
+let ignoreNextNoClick = false;
+$('btn-no').addEventListener('pointerenter', (e) => {
+  if (e.pointerType === 'mouse') handleNoEscape();
+});
+$('btn-no').addEventListener('pointerdown', (e) => {
   e.preventDefault();
+  ignoreNextNoClick = true;
   handleNoEscape();
-}, { passive: false });
+});
+$('btn-no').addEventListener('click', (e) => {
+  e.preventDefault();
+  if (ignoreNextNoClick) { ignoreNextNoClick = false; return; }
+  handleNoEscape();
+});
 
 $('btn-yes').addEventListener('click', async () => {
   const btn = $('btn-yes');
@@ -272,9 +296,9 @@ $('btn-yes').addEventListener('click', async () => {
    ============================================= */
 const LOADING_STEPS = [
   { at: 0,   msg: "Processando resposta..." },
-  { at: 25,  msg: "Verificando compatibilidade..." },
-  { at: 50,  msg: "Consultando os astros..." },
-  { at: 75,  msg: "Executando algoritmo " },
+  { at: 25,  msg: "Abrindo com e4..." },
+  { at: 50,  msg: "Consultando o kiwi triste..." },
+  { at: 75,  msg: "Calculando xeque-mate em 3..." },
   { at: 100, msg: "Resultado encontrado ✓" }
 ];
 
@@ -283,11 +307,13 @@ function startLoading() {
   const fill = $('progress-fill');
   const pct = $('progress-percent');
   const msg = $('progress-message');
+  const kiwi = $('progress-kiwi');
   let stepIndex = 0;
 
   const interval = setInterval(() => {
     current = Math.min(current + 0.5, 100);
     fill.style.width = current + '%';
+    kiwi.style.left = `calc(${current}% - 15px)`;
     pct.textContent = Math.floor(current) + '%';
 
     // Atualiza mensagem quando bate nos marcos
@@ -310,17 +336,18 @@ function startLoading() {
    TELA 4 — Surpresa / Typewriter
    ============================================= */
 const TYPEWRITER_SEQUENCE = [
-  { text: "VOCÊ DISSE SIM? ",               pause: 1500 },
-  { text: "valeu o tempo que eu perdi entao", pause: 2000 },
-  { text: "impossivel que isso deu certo",   pause: 1500 },
-  { text: "mas fica com o resultado", pause: 0 }
+  { text: "Escolheu a única escolha possível para essa pergunta", pause: 1800 },
+  { text: "Bom, como além de ser um excelente garoto de programa", pause: 2000 },
+  { text: "também sou o último romântico", pause: 0 }
 ];
 
 async function startTypewriter() {
   const el = $('typewriter-text');
   const btn = $('btn-surprise');
+  const dots = document.querySelectorAll('.typewriter-dots span');
 
   for (let i = 0; i < TYPEWRITER_SEQUENCE.length; i++) {
+    dots.forEach((dot, index) => dot.classList.toggle('active', index === i));
     const { text, pause } = TYPEWRITER_SEQUENCE[i];
     el.classList.remove('done');
     el.textContent = '';
@@ -353,6 +380,15 @@ $('btn-surprise').addEventListener('click', () => {
   transitionTo('screen-4', 'screen-5');
   setTimeout(animateInviteCard, 200);
 });
+function animateInviteCard() {
+  document.querySelectorAll('.invite-row').forEach((row, index) => {
+    row.classList.add('hidden-row');
+    setTimeout(() => {
+      row.classList.remove('hidden-row');
+      row.classList.add('visible-row');
+    }, index * 120);
+  });
+}
 /* =============================================
    TELA 5 — O Convite
    ============================================= */
@@ -367,14 +403,15 @@ $('btn-confirm').addEventListener('click', () => {
   }
 
   transitionTo('screen-5', 'screen-final');
-  setTimeout(animateFinalScreen, 300);
+  setTimeout(animateFinalScreen, 500);
 });
 
 /* =============================================
    TELA FINAL
    ============================================= */
 function animateFinalScreen() {
-  $('final-text').textContent = CONFIG.textoFinal;
+  $('final-text').innerHTML = CONFIG.textoFinal.replace(' a derrota', '<br>a derrota');
+  setTimeout(() => document.querySelector('.fallen-king').classList.add('fallen'), 400);
   spawnHearts(8);
 }
 
@@ -382,13 +419,13 @@ $('btn-whatsapp').addEventListener('click', () => {
   var data = document.getElementById('input-data').value || 'A combinar';
   var hora = document.getElementById('input-hora').value || 'A combinar';
   var local = document.getElementById('input-local').value || 'A combinar';
-  var ativ = document.getElementById('input-ativ').value || 'Surpresa!';
+  var ativ = 'Comer um pastel e perder no xadrez pessoalmente';
 
   var msg = '❤️ *Encontro confirmado!*\n\n' +
     '📅 Data: ' + data + '\n' +
     '🕐 Hora: ' + hora + '\n' +
     '📍 Local: ' + local + '\n' +
-    '🍣 Atividade: ' + ativ + '\n\n' +
+    '♟️ Atividade: ' + ativ + '\n\n' +
     'Te vejo lá! 😊';
 
   var url = 'https://wa.me/5517997061100?text=' + encodeURIComponent(msg);
